@@ -2,7 +2,7 @@ import React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -48,7 +48,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function SearchBox() {
   let [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   return (
     <Search>
@@ -59,6 +58,8 @@ function SearchBox() {
         placeholder="Search…"
         inputProps={{ "aria-label": "search" }}
         value={searchParams.get("movie") || ""}
+        // value={value}
+        // onChange={onChange}
         onChange={(event) => {
           let movie = event.target.value;
           if (movie) {

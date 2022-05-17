@@ -27,7 +27,7 @@ function SearchPage() {
         );
         setMovieResults(res.data.results);
         setError("");
-        console.log(res);
+        console.log("get data");
       } catch (error) {
         console.log(error);
         setError(error.message);
@@ -51,10 +51,12 @@ function SearchPage() {
             return movie.title != null;
           })
           .map((movie) => (
-            <Grid key={movie.id} item padding={1} xs={2}>
-              <Card sx={{ cursor: "pointer" }}>
+            <Grid key={movie.id} item padding={1} sm={3} md={2}>
+              <Card
+                onClick={() => navigate(`/film/${movie.id}`)}
+                sx={{ cursor: "pointer" }}
+              >
                 <CardMedia
-                  onClick={() => navigate(`/film/${movie.id}`)}
                   component="img"
                   image={
                     movie.poster_path === null
@@ -73,12 +75,9 @@ function SearchPage() {
                     gutterBottom
                     sx={{
                       display: "inline-block",
-                      fontSize: "0.7rem",
+                      fontSize: "0.9rem",
                       fontWeight: "550",
-                      height: "1.9rem",
-                      overflow: "hidden",
-                      marginY: "0.04vw",
-                      textOverflow: "ellipsis",
+                      height: "2.2rem",
                     }}
                     component="div"
                   >

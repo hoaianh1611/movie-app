@@ -7,11 +7,20 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import SearchBox from "./SearchBox";
+import { useSearchParams } from "react-router-dom";
 
 function NavBar() {
-  const [display, setDisplay] = useState([false]);
+  const [display, setDisplay] = useState(false);
   let auth = useAuth();
   let navigate = useNavigate();
+  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchMovie, setSearchMovie] = useState("");
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    setSearchParams({ searchMovie });
+    navigate(`/search/${searchParams}`);
+  };
 
   if (auth.isAuthenticated) {
     return (
@@ -24,7 +33,9 @@ function NavBar() {
           position: "static",
         }}
       >
-        <SearchBox />
+        <form onSubmit={handleOnSubmit} style={{ marginTop: "0.5rem" }}>
+          <SearchBox />
+        </form>
         <Box
           sx={{
             marginLeft: "1rem",
