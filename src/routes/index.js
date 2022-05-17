@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import BlankLayout from "../layouts/BlankLayout";
 import MainLayout from "../layouts/MainLayout";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/HomePage";
+import SearchPage from "../pages/SearchPage";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
@@ -21,6 +22,7 @@ function Router() {
       >
         <Route index element={<HomePage />} />
         <Route path="film/:id" element={<DetailPage />} />
+        <Route path="search/" element={<SearchPage />} />
       </Route>
 
       <Route element={<BlankLayout />}>

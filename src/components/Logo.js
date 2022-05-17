@@ -6,7 +6,7 @@ function Logo({ disabledLink = false, sx }) {
   const logo = (
     <Box
       sx={{
-        width: "95px",
+        width: "100px",
         display: "flex",
         justifyContent: "center",
         alignContent: "center",

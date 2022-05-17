@@ -8,16 +8,36 @@ import apiService from "../app/apiService";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import CardItem from "./CardItem";
 
-//need set display to
+//settings of slick sliider
 const settings = {
   dots: true,
   infinite: true,
-  slidesToShow: 7,
-  slidesToScroll: 7,
+  arrows: true,
+  slidesToShow: 9,
+  slidesToScroll: 9,
   responsive: [
     {
-      breakpoint: 1200,
+      breakpoint: 1300,
+      settings: {
+        dots: true,
+        infinite: true,
+        slidesToShow: 8,
+        slidesToScroll: 8,
+      },
+    },
+    {
+      breakpoint: 1250,
+      settings: {
+        dots: true,
+        infinite: true,
+        slidesToShow: 7,
+        slidesToScroll: 7,
+      },
+    },
+    {
+      breakpoint: 1150,
       settings: {
         dots: true,
         infinite: true,
@@ -37,16 +57,14 @@ const settings = {
     {
       breakpoint: 800,
       settings: {
-        dots: true,
         infinite: true,
         slidesToShow: 4,
         slidesToScroll: 4,
       },
     },
     {
-      breakpoint: 600,
+      breakpoint: 500,
       settings: {
-        dots: true,
         infinite: true,
         slidesToShow: 3,
         slidesToScroll: 3,
@@ -55,18 +73,17 @@ const settings = {
   ],
 };
 
-function FilmCard({ movieId }) {
+function FilmCard({ genreId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [movies, setMovies] = useState([]);
-  const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {
     const getMovies = async () => {
       setLoading(true);
       try {
         const res = await apiService.get(
-          `/3/discover/movie?api_key=${API_KEY}&language=en-US&page=1&with_genres=${movieId}`
+          `/3/discover/movie?api_key=${API_KEY}&language=en-US&page=1&with_genres=${genreId}`
         );
         setMovies(res.data.results);
         setError("");
@@ -77,9 +94,8 @@ function FilmCard({ movieId }) {
       setLoading(false);
     };
     getMovies();
-  }, [movieId]);
+  }, [genreId]);
 
-  const navigate = useNavigate();
   return (
     <div>
       <Grid
@@ -87,7 +103,11 @@ function FilmCard({ movieId }) {
         spacing={1.5}
         mt={1}
         wrap={"nowrap"}
-        style={{ display: "inline-block", zIndex: "1" }}
+        sx={{
+          display: "inline-block",
+          py: 10,
+          my: -10,
+        }}
       >
         <Slider {...settings}>
           {movies.map((movie) => (
@@ -95,23 +115,18 @@ function FilmCard({ movieId }) {
               key={movie.id}
               item
               padding={1}
-              sx={{ flexShrink: 0, zIndex: "1" }}
+              sx={{
+                flexShrink: 0,
+              }}
             >
-              <Card
-                onClick={() => navigate(`/film/${movie.id}`)}
-                sx={{ cursor: "pointer" }}
-                onMouseEnter={() => setIsShown(true)}
-                onMouseLeave={() => setIsShown(false)}
-              >
-                <CardMedia
-                  component="img"
-                  image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt="green iguana"
-                />
-                {isShown && (
-                  <div>I'll appear when you hover over the button.</div>
-                )}
-              </Card>
+              <CardItem
+                movieId={movie.id}
+                moviePosterPath={movie.poster_path}
+                movieTitle={movie.title}
+                movieOverview={movie.overview}
+                movieVote={movie.vote_average}
+                movieBackdropPath={movie.backdrop_path}
+              />
             </Grid>
           ))}
         </Slider>

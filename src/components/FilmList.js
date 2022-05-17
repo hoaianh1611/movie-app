@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import apiService from "../app/apiService";
 import { API_KEY } from "../app/config";
 import FilmCard from "../components/FilmCard";
+import FilmCardFavorite from "./FilmCardFavorite";
 
 function FilmList() {
   const [loading, setLoading] = useState(true);
@@ -50,24 +51,32 @@ function FilmList() {
 
   return (
     <div>
-      {shuffle(movieGenres)
-        .slice(0, 5)
-        .map((movieGenre) => (
-          <Grid
-            container
-            spacing={2}
-            mt={1}
-            sx={{ padding: { sm: "0px 30px", md: "0px 70px" } }}
-          >
+      <Grid
+        container
+        spacing={2}
+        mt={1}
+        maxWidth={"100%"}
+        sx={{ padding: { sm: "0px 30px", md: "0px 70px" } }}
+      >
+        {shuffle(movieGenres)
+          .slice(0, 5)
+          .map((movieGenre) => (
             <Grid key={movieGenre.id} item width={"100%"}>
-              <Typography fontWeight={"600"} fontSize={"20px"}>
+              <Typography fontWeight={"600"} fontSize={"20px"} mt={3}>
                 {movieGenre.name} Movies
               </Typography>
 
-              <FilmCard movieId={movieGenre.id} />
+              <FilmCard genreId={movieGenre.id} />
             </Grid>
-          </Grid>
-        ))}
+          ))}
+        <Grid key={"favoriteList"} item width={"100%"}>
+          <Typography fontWeight={"600"} fontSize={"20px"} mt={3}>
+            My Favorite Movies
+          </Typography>
+
+          <FilmCardFavorite />
+        </Grid>
+      </Grid>
     </div>
   );
 }
