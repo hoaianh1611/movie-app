@@ -17,11 +17,12 @@ body {
 
 .slick-dots {
   /* bottom: 5px; */
-  z-index: -1;
+  z-index: 0;
 }
 
 .slick-track {
   overflow: visible;
+  height: 220px;
 }
 
 .slick-slide {

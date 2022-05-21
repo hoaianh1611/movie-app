@@ -8,6 +8,7 @@ import SearchPage from "../pages/SearchPage";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
+import GenrePage from "../pages/GenrePage";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
         <Route index element={<HomePage />} />
         <Route path="film/:id" element={<DetailPage />} />
         <Route path="search/:movie" element={<SearchPage />} />
+        <Route path="genre/:genre" element={<GenrePage />} />
       </Route>
 
       <Route element={<BlankLayout />}>

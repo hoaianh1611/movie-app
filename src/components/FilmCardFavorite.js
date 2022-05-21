@@ -7,7 +7,7 @@ import CardFavorite from "./CardFavorite";
 
 const getDataFromLocalStorage = () => {
   try {
-    return JSON.parse(localStorage.getItem("favorite")) || [];
+    return JSON.parse(localStorage.getItem("favorite")).list || [];
   } catch (err) {
     return [];
   }

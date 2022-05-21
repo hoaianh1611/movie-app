@@ -14,12 +14,12 @@ function NavBar() {
   let auth = useAuth();
   let navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  const [searchMovie, setSearchMovie] = useState("");
 
+  //base.url.com/path?q=query => query param should be after "?"
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    setSearchParams({ searchMovie });
-    navigate(`/search/${searchParams}`);
+    setSearchParams(e.target[0].value);
+    navigate(`/search/movie?${searchParams}`);
   };
 
   if (auth.isAuthenticated) {

@@ -2,7 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import apiService from "../app/apiService";
 import { API_KEY } from "../app/config";
-import FilmCard from "../components/FilmCard";
+import FilmCard from "./FilmCard";
 import FilmCardFavorite from "./FilmCardFavorite";
 
 function FilmList() {
@@ -10,6 +10,7 @@ function FilmList() {
   const [error, setError] = useState("");
   const [movieGenres, setMovieGenres] = useState([]);
 
+  //get movie genres from api
   useEffect(() => {
     const getMovieGenres = async () => {
       setLoading(true);

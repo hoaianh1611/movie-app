@@ -1,11 +1,17 @@
+import { Breadcrumbs, Card, CardMedia, Grid, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { Box, Card, CardMedia, Grid, Typography } from "@mui/material";
-import { API_KEY } from "../app/config";
+import {
+  Link,
+  Link as RouterLink,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import apiService from "../app/apiService";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { API_KEY } from "../app/config";
+import useAuth from "../hooks/useAuth";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import useAuth from "../hooks/useAuth";
 
 const getDataFromLocalStorage = () => {
   try {
@@ -15,21 +21,21 @@ const getDataFromLocalStorage = () => {
   }
 };
 
-function SearchPage() {
-  const navigate = useNavigate();
-
+function GenrePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [movieResults, setMovieResults] = useState([]);
+  const [movies, setMovies] = useState([]);
+
+  const navigate = useNavigate();
+  let { genre } = useParams();
 
   let favoriteList = getDataFromLocalStorage();
-  const [favorites, setFavorites] = useState(getDataFromLocalStorage());
   const { user } = useAuth();
-  let [searchParams, setSearchParams] = useSearchParams();
-  let movie = searchParams.get("movie");
+  const [favorites, setFavorites] = useState(getDataFromLocalStorage());
 
   const addFavorite = (movieId) => {
     let arr = favorites;
+
     if (favorites.includes(movieId)) {
       arr.splice(favorites.indexOf(movieId), 1);
     } else {
@@ -43,34 +49,59 @@ function SearchPage() {
   };
 
   useEffect(() => {
-    const getMovies = async () => {
+    const getMovieGenres = async () => {
       setLoading(true);
       try {
         const res = await apiService.get(
-          `/3/search/movie?api_key=${API_KEY}&language=en-US&page=1&query=${movie}&include_adult=false`
+          `/3/genre/movie/list?api_key=${API_KEY}&language=en-US`
         );
-        setMovieResults(res.data.results);
+        const genres = res.data.genres;
+        const id = genres.find((g) => g.name === genre)?.id;
+        const res2 = await apiService.get(
+          `/3/discover/movie?api_key=${API_KEY}&language=en-US&page=1&with_genres=${id}`
+        );
+        setMovies(res2.data.results);
         setError("");
-        console.log("get data");
       } catch (error) {
         console.log(error);
         setError(error.message);
       }
       setLoading(false);
     };
-    getMovies();
-  }, [movie]);
+    getMovieGenres();
+  }, []);
 
   return (
-    <div>
+    <>
+      <Breadcrumbs
+        separator="›"
+        aria-label="breadcrumb"
+        sx={{
+          mb: 3,
+          width: "100%",
+          padding: { sm: "0px 30px", md: "0px 70px" },
+          marginTop: "65px",
+        }}
+      >
+        <Link
+          underline="hover"
+          component={RouterLink}
+          to="/"
+          style={{ color: "gray" }}
+        >
+          Homepage
+        </Link>
+        <Typography color="text.primary" fontWeight={550} fontSize="1.5rem">
+          {genre}
+        </Typography>
+      </Breadcrumbs>
       <Grid
         container
         spacing={2}
-        mt={7}
         maxWidth={"100%"}
         sx={{ padding: { sm: "0px 30px", md: "0px 70px" } }}
       >
-        {movieResults
+        {movies
           .filter((movie) => {
             return movie.title != null;
           })
@@ -155,8 +186,8 @@ function SearchPage() {
             </Grid>
           ))}
       </Grid>
-    </div>
+    </>
   );
 }
 
-export default SearchPage;
+export default GenrePage;

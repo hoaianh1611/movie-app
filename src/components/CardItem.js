@@ -5,30 +5,54 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import useAuth from "../hooks/useAuth";
 
 const getDataFromLocalStorage = () => {
   try {
-    return JSON.parse(localStorage.getItem("favorite")) || [];
+    return JSON.parse(localStorage.getItem("favorite")).list || [];
   } catch (err) {
     return [];
   }
 };
+// const getUserFromLocalStorage = () => {
+//   try {
+//     return JSON.parse(localStorage.getItem("favorite")) || [];
+//   } catch (err) {
+//     return [];
+//   }
+// };
 
 function CardItem({ movieId, moviePosterPath, movieTitle, movieVote }) {
   const [isShown, setIsShown] = useState(false);
   const navigate = useNavigate();
   let favoriteList = getDataFromLocalStorage();
+  const { user } = useAuth();
   const [favorites, setFavorites] = useState(getDataFromLocalStorage());
+  // const [dataLocalStorage, setDataLocalStorage] = useState(
+  //   getUserFromLocalStorage()
+  // );
+
+  // console.log(user);
+  // console.log(typeof dataLocalStorage);
 
   const addFavorite = () => {
     let arr = favorites;
+    // let arrData = dataLocalStorage;
+
+    // if (arrData.find((i) => i.user === user.username) === undefined) {
+    //   setDataLocalStorage([...{ user: user.username, list: favoriteList }]);
+    // }
+
     if (favorites.includes(movieId)) {
       arr.splice(favorites.indexOf(movieId), 1);
     } else {
       arr.push(movieId);
     }
     setFavorites([...arr]);
-    localStorage.setItem("favorite", JSON.stringify(favorites));
+    localStorage.setItem(
+      "favorite",
+      JSON.stringify({ user: user.username, list: favorites })
+    );
   };
 
   return (
