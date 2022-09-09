@@ -4,6 +4,8 @@
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
+##  Click to view DEMO[https://movie-app-ha.netlify.app/]
+
 ### Features:
 - Authentication: Basic Login to access homepage
 - Display slide list of movies by genre (randomize 5 genres when re-render)
